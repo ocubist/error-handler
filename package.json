@@ -1,0 +1,25 @@
+{
+  "name": "@ocubist/error-handler",
+  "version": "0.1.0",
+  "description": "A custom error handler for Node.js applications.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "error",
+    "handler",
+    "typescript"
+  ],
+  "author": "ocubist",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.21",
+    "zod": "^3.22.4"
+  }
+}
