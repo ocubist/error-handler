@@ -1,4 +1,4 @@
-import { MyError } from "../errors";
+import { CustomError } from "../errors";
 import {
   DetectorFunction,
   ErrorHandlerMiddleware,
@@ -9,8 +9,8 @@ export const createMiddleware = (
   detector: DetectorFunction,
   transformer: TransformerFunction
 ): ErrorHandlerMiddleware => {
-  return (err: unknown): unknown | MyError => {
-    if (err instanceof MyError) return err;
+  return (err: unknown): unknown | CustomError => {
+    if (err instanceof CustomError) return err;
     if (!detector(err)) return err;
     else return transformer(err);
   };

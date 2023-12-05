@@ -1,11 +1,11 @@
 import { CustomError } from "../CustomError";
 import { CustomErrorProps } from "../types/CustomErrorProps";
 
-export class UnexpectedError extends CustomError {
+export class NonObjectError extends CustomError {
   constructor(unexpectedErrorProps: CustomErrorProps) {
     const { message, payload, cause, origin } = unexpectedErrorProps;
     super({
-      name: "UnexpectedError",
+      name: "NonObjectError",
       message,
       payload,
       origin,

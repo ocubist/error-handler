@@ -1,4 +1,4 @@
-import { UnexpectedError } from "../../errors";
+import { NonObjectError } from "../../errors/customErrors/NonObjectError";
 import { createMiddleware } from "../createMiddleware";
 
 const detector = (err: unknown): boolean => {
@@ -13,7 +13,11 @@ const transformer = (err: unknown) => {
     // Handle other non-object types (string, number, boolean, undefined)
     message += `: ${err}`;
   }
-  return new UnexpectedError(message, { err });
+  return new NonObjectError({
+    message,
+    origin: err,
+    payload: { type: typeof err },
+  });
 };
 
 export const primitiveMiddleware = createMiddleware(detector, transformer);

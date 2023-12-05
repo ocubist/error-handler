@@ -6,7 +6,7 @@ const detector = (err: unknown) => err instanceof ZodError;
 const transformer = (err: unknown) => {
   const zodError = err as ZodError;
 
-  const validationDetails: ValidationErrorDetail[] = zodError.errors.map(
+  const validationErrorDetails: ValidationErrorDetail[] = zodError.errors.map(
     (e) => {
       return {
         path: e.path.join("."),
@@ -15,8 +15,10 @@ const transformer = (err: unknown) => {
     }
   );
 
-  return new ValidationError(`Zod-Validation-Error`, validationDetails, {
-    err,
+  return new ValidationError({
+    message: "Zod-Validation-Error",
+    validationErrorDetails,
+    origin: err,
   });
 };
 

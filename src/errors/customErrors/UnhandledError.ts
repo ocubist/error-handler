@@ -1,13 +1,11 @@
-import { MyError } from "../MyError";
+import { CustomError } from "../CustomError";
 
-export class UnhandledError extends MyError {
+export class UnhandledError extends CustomError {
   constructor(err: unknown) {
     super({
       name: "UnhandledError",
-      msg: "Error could not be processed. This shouldn't have happened",
-      additionalProps: {
-        err,
-      },
+      message: "Error could not be processed.",
+      origin: err,
     });
   }
 }

@@ -1,20 +1,32 @@
-import { AdditionalProps } from "../types/AdditionalProps";
-import { MyError } from "../MyError";
+import { z } from "zod";
+import { CustomError } from "../CustomError";
+import { Payload, CustomErrorPropsSchema } from "../types/CustomErrorProps";
 
-export interface ValidationErrorDetail {
-  path: string;
-  msg: string;
-}
+const ValidationErrorDetailSchema = z.object({
+  path: z.string(),
+  msg: z.string(),
+});
 
-export class ValidationError extends MyError {
-  validationDetails: ValidationErrorDetail[];
+export type ValidationErrorDetail = z.infer<typeof ValidationErrorDetailSchema>;
 
-  constructor(
-    msg: string,
-    validationDetails: ValidationErrorDetail[],
-    additionalProps: AdditionalProps = {}
-  ) {
-    super({ name: "ValidationError", msg, additionalProps });
-    this.validationDetails = validationDetails;
+export const ValidationErrorPropsSchema = CustomErrorPropsSchema.merge(
+  z.object({
+    validationErrorDetails: z.array(ValidationErrorDetailSchema),
+  })
+);
+
+export type ValidationErrorProps = z.infer<typeof ValidationErrorPropsSchema>;
+
+export class ValidationError extends CustomError {
+  constructor(props: ValidationErrorProps) {
+    const { message, payload, cause, origin, validationErrorDetails } = props;
+
+    let thePayload: Payload = { validationErrorDetails };
+
+    if (payload !== undefined) {
+      thePayload = { ...thePayload, payload };
+    }
+
+    super({ name: "ValidationError", message, payload, cause, origin });
   }
 }

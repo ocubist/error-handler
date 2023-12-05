@@ -1,6 +1,6 @@
-import { MyError } from "../errors";
+import { CustomError } from "../errors";
 
 export type DetectorFunction = (err: unknown) => boolean;
-export type TransformerFunction = (err: unknown) => MyError;
-export type ErrorHandlerMiddleware = (err: unknown) => unknown | MyError;
+export type TransformerFunction = (err: unknown) => CustomError;
+export type ErrorHandlerMiddleware = (err: unknown) => unknown | CustomError;
 export type MiddlewareChain = ErrorHandlerMiddleware[];

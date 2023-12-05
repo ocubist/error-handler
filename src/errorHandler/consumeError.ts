@@ -1,4 +1,5 @@
-import { MyError, UnexpectedError } from "../errors";
+import { CustomError } from "../errors";
+import { FatalError } from "../errors/customErrors/FatalError";
 import { UnhandledError } from "../errors/customErrors/UnhandledError";
 import { middlewareChain } from "./middlewareChain";
 import { MiddlewareChain } from "./types";
@@ -10,8 +11,8 @@ export const consumeError = (
     customMiddlewareChain: MiddlewareChain;
     position: "start" | "end" | "replace";
   }
-): MyError => {
-  let error: MyError;
+): CustomError => {
+  let error: CustomError;
 
   try {
     let chain = middlewareChain;
@@ -30,21 +31,20 @@ export const consumeError = (
 
     const errorAfterMiddlewareChain = chain.reduce((acc, mw) => mw(acc), err);
 
-    if (errorAfterMiddlewareChain instanceof MyError) {
+    if (errorAfterMiddlewareChain instanceof CustomError) {
       error = errorAfterMiddlewareChain;
     } else {
       error = new UnhandledError(err);
     }
   } catch (runtimeError) {
-    error = new UnexpectedError(
-      "This shouldn't have happened. Some Error occurred in the Error-Handler itself.",
-      {
-        err: runtimeError,
-        details: {
-          originalError: err,
-        },
-      }
-    );
+    error = new FatalError({
+      message:
+        "This shouldn't have happened. Some Error occurred in the Error-Handler itself.",
+      origin: runtimeError,
+      payload: {
+        originalError: err,
+      },
+    });
   }
 
   if (rethrow) {
